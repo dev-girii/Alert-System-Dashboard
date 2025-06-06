@@ -1,26 +1,42 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <Sidebar />
+    <div class="layout">
+      <DashboardHeader />
+      <SearchAndFilter />
+      <Dashboard />
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import DashboardHeader from './components/DashboardHeader.vue';
+import Sidebar from './components/AppSidebar.vue';
+import Dashboard from './views/DashboardMain.vue';
+import SearchAndFilter from './components/SearchAndFilter.vue';
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    DashboardHeader,
+    Sidebar,
+    Dashboard,
+    SearchAndFilter
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.layout {
+  width: calc(100% - 60px);
+  height: 100vh;
+  background-color: white;
+  position: relative;
+  left: 60px;
+}
+
+@media (max-width: 600px) {
+.layout{
+  width: 100%;
+  left: 0;
+}
 }
 </style>
