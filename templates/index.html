@@ -12,7 +12,7 @@
   <script>
     const socket = io();
     socket.on('cpu_data', (data) => {
-      document.getElementById('cpu').innerText = `Time: ${data.time}, CPU: ${data.usage}`;
+      document.getElementById('cpu').innerText = `${data.time} + ${data.usage}`;
     });
   </script>
 </body>

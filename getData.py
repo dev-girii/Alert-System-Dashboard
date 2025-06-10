@@ -30,7 +30,7 @@ def fetch_and_emit_data():
             row = cursor.fetchone()
             if row:
                 # Assuming usage_idle is at column index 4 (adjust if needed)
-                usage_idle = float(row[5])
+                usage_idle = float(row[7])
                 cpu_utilized = 100 - usage_idle
                 socketio.emit('cpu_data', {
                     'time': str(row[0]),
