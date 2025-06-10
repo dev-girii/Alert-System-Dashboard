@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CPU Live Stats</title>
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+</head>
+<body>
+  <h2>Live CPU Usage</h2>
+  <div id="cpu">Waiting for data...</div>
+
+  <script>
+    const socket = io();
+    socket.on('cpu_data', (data) => {
+      document.getElementById('cpu').innerText = `Time: ${data.time}, CPU: ${data.usage}`;
+    });
+  </script>
+</body>
+</html>

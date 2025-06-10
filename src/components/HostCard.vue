@@ -1,12 +1,22 @@
 <template>
   <div class="host-card critical">
+    <span class="status-label"></span>
+    <div class="instanceName">
+      TN Tenders
+    </div>
     <div class="host-top">
-      <div class="status-label"></div>
       <div class="host-info">
-        <div class="host-ip" title="192.168.1.20">{{ host.ip }}</div>
-        <div class="host-name" title="app-server">{{ host.name }}</div>
+        <div class="host-ip" title="192.168.1.20"><span>IP:</span> {{ host.ip }}</div>
+        <div class="host-name" title="app-server"><span>Name:</span> {{ host.name }}</div>
       </div>
-      <div class="host-uptime">Uptime: 10d 2h</div>
+      <div class="host-info">
+        <div class="node-type">
+          <span>Node: </span>Web
+        </div>
+        <div class="host-uptime">
+          <span>Uptime: </span>10d 2h
+        </div>
+      </div>
     </div>
     <div class="metrics">
       <div class="metric-box">
@@ -50,6 +60,7 @@ export default {
   border: 3px solid transparent; /* default no border */
   transition: border-color 0.3s ease;
   border-top: 6px solid;
+  position: relative;
 }
 /* Criticality borders */
 .critical {
@@ -64,7 +75,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   flex-wrap: wrap;
   gap: 8px;
 }
@@ -76,8 +87,8 @@ export default {
 }
 
 .host-ip {
-  font-size: 1.2em;
-  font-weight: bold;
+  font-size: 1em;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -85,25 +96,29 @@ export default {
   color: #1e202a;
 }
 
-.host-name {
+.host-name, .host-uptime, .node-type{
   font-size: 0.95em;
-  opacity: 0.75;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 220px;
-  color: #63687e;
+  color: #1e202a;
   font-weight: 500;
 }
 
-.host-uptime {
+
+/* .host-uptime {
   font-size: 0.85em;
-  color: #63687e;
+  color: #1e202a;
   white-space: nowrap;
   flex-shrink: 0;
   font-weight: 500;
   min-width: 70px;
   text-align: right;
+} */
+
+.host-ip span, .host-name span, .host-uptime span, .node-type span{
+    opacity: 0.75;
 }
 
 .metrics {
@@ -204,14 +219,32 @@ export default {
   }
 }
 
-.status-label {
+/* .status-label {
   font-size: 0.85em;
   font-weight: 600;
   margin-bottom: 10px;
   text-align: right;
   color: #e74c3c;
+} */
+.status-label {
+    position: absolute;
+    top: -12px;
+    left: 16px;
+    background-color: #fff;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
+.instanceName{
+    display: flex;
+    gap: 28px;    
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
 .host-card.critical .status-label::after {
   content: "ALERT";
   color: #e74c3c;

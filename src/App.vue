@@ -2,24 +2,17 @@
   <div id="app">
     <Sidebar />
     <div class="layout">
-      <DashboardHeader />
-      <SearchAndFilter />
-      <Dashboard />
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
-import DashboardHeader from './components/DashboardHeader.vue';
 import Sidebar from './components/AppSidebar.vue';
-import Dashboard from './views/DashboardMain.vue';
-import SearchAndFilter from './components/SearchAndFilter.vue';
+
 export default {
   components: {
-    DashboardHeader,
-    Sidebar,
-    Dashboard,
-    SearchAndFilter
+    Sidebar
   }
 };
 </script>

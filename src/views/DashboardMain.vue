@@ -1,4 +1,6 @@
 <template>
+      <DashboardHeader />
+      <SearchAndFilter />
   <div class="dashboard">
     <div class="hosts">
       <HostCard v-for="host in hosts" :key="host.id" :host="host" />
@@ -11,9 +13,11 @@
 import { mapState } from 'vuex';
 import HostCard from '../components/HostCard.vue';
 import StatsPanel from '../components/StatsPanel.vue';
-
+import SearchAndFilter from '../components/SearchAndFilter.vue';
+import DashboardHeader from '../components/DashboardHeader.vue';
 export default {
-  components: { HostCard, StatsPanel },
+  components: { HostCard, StatsPanel, DashboardHeader,
+    SearchAndFilter},
   computed: {
     ...mapState('hosts', ['hosts', 'metrics'])
   }

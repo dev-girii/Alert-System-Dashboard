@@ -4,14 +4,16 @@
     <a href="#" data-tooltip="Linux" aria-label="Linux" style="margin-bottom: 16px;">
   <i class="fab fa-linux"></i>
 </a>
-
-<a href="#" data-tooltip="Home" aria-label="Home">
-  <i class="fas fa-tachometer-alt"></i>
-</a>
-
-<a href="#" data-tooltip="Explore" aria-label="Explore">
-  <i class="fas fa-chart-bar"></i>
-</a>
+<RouterLink to="/">
+  <a href="#" data-tooltip="Dashboard" aria-label="Dashboard" class="active">
+    <i class="fas fa-tachometer-alt"></i>
+  </a>
+</RouterLink>
+<RouterLink to="/statistics">
+  <a href="#" data-tooltip="Explore" aria-label="Explore">
+    <i class="fas fa-chart-bar"></i>
+  </a>
+</RouterLink>
 
 <a href="#" data-tooltip="Alerts" aria-label="Alerts">
   <i class="fas fa-bell"></i>
@@ -56,7 +58,7 @@
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.sidebar a:hover {
+.sidebar a:hover, .sidebar a.active {
     color: #f0efff;
     background-color: #3e3d4a;
 }
