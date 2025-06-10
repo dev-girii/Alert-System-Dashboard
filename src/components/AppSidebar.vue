@@ -14,10 +14,11 @@
     <i class="fas fa-chart-bar"></i>
   </a>
 </RouterLink>
-
-<a href="#" data-tooltip="Alerts" aria-label="Alerts">
-  <i class="fas fa-bell"></i>
-</a>
+<RouterLink to='/notifications'>
+  <a href="#" data-tooltip="Alerts" aria-label="Alerts">
+    <i class="fas fa-bell"></i>
+  </a>
+</RouterLink>
 
 <a href="#" data-tooltip="Settings" aria-label="Settings" style="margin-top: auto;">
   <i class="fas fa-cog"></i>
@@ -58,32 +59,9 @@
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.sidebar a:hover, .sidebar a.active {
+.sidebar a:hover, .router-link-active {
     color: #f0efff;
     background-color: #3e3d4a;
-}
-
-/* Tooltip text */
-.sidebar a::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 50px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #eeeeee;
-  color: #eee;
-  padding: 6px 10px;
-  font-size: 0.85em;
-  border-radius: 4px;
-  opacity: 0;
-  pointer-events: none;
-  white-space: nowrap;
-  transition: opacity 0.3s ease;
-  z-index: 10;
-}
-
-.sidebar a:hover::after {
-  opacity: 1;
 }
 
 @media (max-width: 600px) {

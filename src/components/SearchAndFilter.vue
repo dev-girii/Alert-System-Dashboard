@@ -1,53 +1,93 @@
 <template>
-    <section class="searchSection">
-        <div class="tabSection">
-            <div class="criticalTab">
-                <i class="fas fa-exclamation-triangle" style="color:crimson"></i>
-                <h4>Critical</h4>
-            </div>
-            <div class="moderateTab">
-                <i class="fas fa-exclamation-circle" style="color:orange"></i>
-                <h4>Moderate</h4>
-            </div>
-            <div class="safeTab">
-                <i class="fas fa-check-circle" style="color:green"></i>
-                <h4>Safe</h4>
-            </div>
-        </div>
-        <div class="search-container">
-            <input type="text" placeholder="Search hosts..." />
-            <i class="fas fa-search"></i>
-        </div>
-    </section>
+  <section class="searchSection">
+    <div class="tabSection">
+      <div
+        v-for="level in levels"
+        :key="level.name"
+        class="status-box"
+        :class="{ active: activeLevel === level.name }"
+        @click="selectLevel(level.name)"
+      >
+        <i :class="level.class" :style="level.color" />
+        <h4>{{ level.label }}</h4>
+        <i
+          class="fas fa-times" style="font-size:13px"
+          v-if="activeLevel === level.name"
+          @click.stop="clearLevel"
+        />
+      </div>
+    </div>
+    <div class="search-container">
+      <input type="text" placeholder="Search hosts..." />
+      <i class="fas fa-search"></i>
+    </div>
+  </section>
 </template>
-
+<script>
+export default {
+  data() {
+    return {
+      activeLevel: null,
+      levels: [
+        {
+          name: "critical",
+          label: "Critical",
+          class: "fas fa-exclamation-triangle",
+          color: "color:crimson",
+        },
+        {
+          name: "moderate",
+          label: "Moderate",
+          class: "fas fa-exclamation-circle",
+          color: "color:orange",
+        },
+        {
+          name: "safe",
+          label: "Safe",
+          class: "fas fa-check-circle",
+          color: "color:green",
+        },
+      ],
+    };
+  },
+  methods: {
+    selectLevel(level) {
+      this.activeLevel = level;
+    },
+    clearLevel() {
+      this.activeLevel = null;
+    },
+  },
+};
+</script>
 <style scoped>
-.tabSection{
-    display: flex;
-    justify-content: space-evenly;
+.tabSection {
+  display: flex;
+  justify-content: space-evenly;
 }
-.tabSection div{
-    padding: 10px;
-    background-color: #f0f2fa;
-    outline: 1px solid #00000057;
-    display: flex;
-    cursor: pointer;
-    gap: 8px;
+.tabSection div {
+  padding: 10px;
+  background-color: #f0f2fa;
+  outline: 1px solid #00000057;
+  display: flex;
+  cursor: pointer;
+  align-items:center;
+  gap: 8px;
 }
 
-.tabSection div.active{
-    background: #becbff;
+.tabSection div.active {
+  background: #becbff;
 }
-.tabSection div h4{
-    font-weight: 400;
+.tabSection div h4 {
+  font-weight: 400;
 }
-.searchSection{
-    width: 100%;
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.3rem 1rem 1rem 1rem;
+.searchSection {
+  width: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.3rem 1rem 1rem 1rem;
 }
 .search-container {
   display: flex;
@@ -88,14 +128,13 @@
   /* .search-container {
     width: 100%;
   } */
-   .searchSection{
+  .searchSection {
     flex-direction: column;
-   }
-   .search-container{
+  }
+  .search-container {
     flex: 1 1;
     margin: 2rem;
     max-width: 100%;
-   }
+  }
 }
-
 </style>
