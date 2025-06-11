@@ -2,17 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CPU Live Stats</title>
+  <title>Live System Metrics</title>
   <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { margin-top: 30px; }
+    .section { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; }
+  </style>
 </head>
 <body>
-  <h2>Live CPU Usage</h2>
-  <div id="cpu">Waiting for data...</div>
+  <h1>Live System Metrics</h1>
+
+  <div class="section">
+    <h2>CPU Data</h2>
+    <pre id="cpu">Waiting for data...</pre>
+  </div>
+
+  <div class="section">
+    <h2>Disk Data</h2>
+    <pre id="disk">Waiting for data...</pre>
+  </div>
+
+  <div class="section">
+    <h2>Memory Data</h2>
+    <pre id="mem">Waiting for data...</pre>
+  </div>
 
   <script>
     const socket = io();
+
+    const formatData = (data) => {
+      return Object.entries(data)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n');
+    };
+
     socket.on('cpu_data', (data) => {
-      document.getElementById('cpu').innerText = `${data.time} + ${data.usage}`;
+      document.getElementById('cpu').innerText = formatData(data);
+    });
+
+    socket.on('disk_data', (data) => {
+      document.getElementById('disk').innerText = formatData(data);
+    });
+
+    socket.on('mem_data', (data) => {
+      document.getElementById('mem').innerText = formatData(data);
     });
   </script>
 </body>

@@ -1,7 +1,7 @@
 <template>
   <div class="explore-page">
-    <h2>Explore Page</h2>
-    <p>This is the explore section.</p>
+    <h2>Statistics Page</h2>
+    <p>This is the Statistics section.</p>
   </div>
 </template>
 

@@ -20,6 +20,9 @@ export default {
     SearchAndFilter},
   computed: {
     ...mapState('hosts', ['hosts', 'metrics'])
+  },
+    created() {
+    this.$store.dispatch('hosts/initSocket'); // Ensure socket connection starts
   }
 };
 </script>

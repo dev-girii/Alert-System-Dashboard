@@ -1,17 +1,17 @@
 <template>
   <div class="host-card critical">
     <span class="status-label"></span>
-    <div class="instanceName">
+    <!-- <div class="instanceName">
       TN Tenders
-    </div>
+    </div> -->
     <div class="host-top">
       <div class="host-info">
-        <div class="host-ip" title="192.168.1.20"><span>IP:</span> {{ host.ip }}</div>
-        <div class="host-name" title="app-server"><span>Name:</span> {{ host.name }}</div>
+        <div class="host-ip" title="192.168.1.20"><span>Instance:</span> {{ host.instance }}</div>
+        <div class="host-name" title="app-server"><span>Host:</span> {{ host.host}}</div>
       </div>
       <div class="host-info">
         <div class="node-type">
-          <span>Node: </span>Web
+          <span>Node: </span>{{host.role}}
         </div>
         <div class="host-uptime">
           <span>Uptime: </span>10d 2h
@@ -21,7 +21,7 @@
     <div class="metrics">
       <div class="metric-box">
         <span class="metric-label">CPU</span>
-        <span class="metric-value status-green">35%</span>
+        <span class="metric-value status-green">{{ host.used_percent }}</span>
       </div>
       <div class="metric-box">
         <span class="metric-label">Memory</span>
@@ -37,7 +37,9 @@
       </div>
     </div>
     <div class="details-link">
-      <a href="#"><i class="fas fa-search"></i> View Details</a>
+      <Router-link :to="`/view-details-${host.instance}`">
+<a href="#"><i class="fas fa-search"></i> View Details</a>
+      </Router-link> 
     </div>
   </div>
 </template>
@@ -45,6 +47,9 @@
 <script>
 export default {
   props: ["host"],
+  mounted(){
+    console.log(this.host);
+  }
 };
 </script>
 
