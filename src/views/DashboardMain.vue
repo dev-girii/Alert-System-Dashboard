@@ -34,7 +34,7 @@ export default {
 }
 .hosts {
     display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Smaller min size for 4 per row */
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Smaller min size for 4 per row */
   gap: 30px; /* Increased spacing */
 }
 </style>

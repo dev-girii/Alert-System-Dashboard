@@ -14,26 +14,34 @@
           <span>Node: </span>{{host.role}}
         </div>
         <div class="host-uptime">
-          <span>Uptime: </span>10d 2h
+          <span>Last Updated: </span>{{host.time}}
         </div>
       </div>
     </div>
     <div class="metrics">
       <div class="metric-box">
         <span class="metric-label">CPU</span>
-        <span class="metric-value status-green">{{ host.used_percent }}</span>
+        <span class="metric-value status-green">
+          {{ parseFloat(host.cpu_idle).toFixed(1) }}
+        </span>
       </div>
       <div class="metric-box">
         <span class="metric-label">Memory</span>
-        <span class="metric-value status-green">3.3 GB / 8 GB</span>
-      </div>
-      <div class="metric-box">
-        <span class="metric-label">Disk</span>
-        <span class="metric-value status-green">50%</span>
+        <span class="metric-value status-green">
+          {{ parseFloat(host.mem_used_percent).toFixed(1) }}
+        </span>
       </div>
       <div class="metric-box">
         <span class="metric-label">Network RX/TX</span>
         <span class="metric-value">30 / 25 MB/s</span>
+      </div>
+      <div class="metric-box">
+        <span class="metric-label">Disk</span>
+        <span class="disk_path">{{ host.disk_path }}: 
+          <span class="metric-value status-green">
+          {{ parseFloat(host.disk_used_percent).toFixed(1) }}
+          </span>
+        </span>
       </div>
     </div>
     <div class="details-link">
@@ -66,6 +74,7 @@ export default {
   transition: border-color 0.3s ease;
   border-top: 6px solid;
   position: relative;
+  min-width: 30rem;
 }
 /* Criticality borders */
 .critical {
@@ -106,7 +115,7 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 220px;
+  max-width: 255px;
   color: #1e202a;
   font-weight: 500;
 }
@@ -143,7 +152,6 @@ export default {
   align-items: center;
   font-size: 0.95em;
   min-width: 90px;
-  max-width: 150px;
   flex: 1 1 120px;
   box-sizing: border-box;
   white-space: normal;

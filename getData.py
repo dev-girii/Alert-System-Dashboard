@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO
 import psycopg2
 import time
-import datetime  # Add at top of file
+import datetime
 import threading
 from decimal import Decimal
 
@@ -39,42 +39,62 @@ def index():
 def fetch_and_emit_data():
     while True:
         try:
-            # ----- CPU -----
+            cpu_data = disk_data = mem_data = {}
+
+            # Fetch latest CPU
             cursor.execute("""
                 SELECT * FROM public.cpu 
-                WHERE cpu = 'cpu0' 
+                WHERE cpu = 'cpu-total' 
                 ORDER BY time DESC LIMIT 1
             """)
-            cpu_row = cursor.fetchone()
-            if cpu_row:
-                cpu_data = row_to_dict(cursor, cpu_row)
-                socketio.emit('cpu_data', cpu_data)
+            row = cursor.fetchone()
+            if row:
+                cpu_data = row_to_dict(cursor, row)
 
-            # ----- DISK -----
+            # Fetch latest Disk
             cursor.execute("""
                 SELECT * FROM public.disk 
                 WHERE device = 'efivarfs' 
                 ORDER BY time DESC LIMIT 1
             """)
-            disk_row = cursor.fetchone()
-            if disk_row:
-                disk_data = row_to_dict(cursor, disk_row)
-                socketio.emit('disk_data', disk_data)
+            row = cursor.fetchone()
+            if row:
+                disk_data = row_to_dict(cursor, row)
 
-            # ----- MEMORY -----
+            # Fetch latest Mem
             cursor.execute("""
                 SELECT * FROM public.mem 
                 ORDER BY time DESC LIMIT 1
             """)
-            mem_row = cursor.fetchone()
-            if mem_row:
-                mem_data = row_to_dict(cursor, mem_row)
-                socketio.emit('mem_data', mem_data)
+            row = cursor.fetchone()
+            if row:
+                mem_data = row_to_dict(cursor, row)
+
+            # Merge all into one dictionary
+            if cpu_data or disk_data or mem_data:
+                raw_time = cpu_data.get('time') or disk_data.get('time') or mem_data.get('time')
+                if isinstance(raw_time, str):
+                    raw_time = datetime.datetime.fromisoformat(raw_time)
+
+                formatted_time = raw_time.strftime("%d/%m/%y - %H:%M:%S") if raw_time else None
+                merged = {
+                    'time': formatted_time,
+                    'host': cpu_data.get('host'),
+                    'instance': cpu_data.get('instance'),
+                    'role': cpu_data.get('role'),
+                    'cpu_idle': cpu_data.get('usage_idle'),
+                    'mem_used_percent': mem_data.get('used_percent'),
+                    'disk_path': disk_data.get('path'),
+                    'disk_used_percent': disk_data.get('used_percent'),
+                }
+                socketio.emit('system_metrics', merged)
+                # print(merged)
 
         except Exception as e:
             print("Database error:", e)
 
         time.sleep(2)
+
 
 @socketio.on('connect')
 def handle_connect():

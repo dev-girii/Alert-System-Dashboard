@@ -7,6 +7,7 @@ const routes = [
   { path: '/', name: 'Dashboard', component: Dashboard },
   { path: '/statistics', name: 'StatisticsPage', component: StatisticsPage },
   { path: '/notifications', name: 'NotificationsPage', component: NotificationsPage },
+  
   {path: '/view-details-:tender',name: 'ViewDetails',component: ViewDetails, props: true}
 ]
 

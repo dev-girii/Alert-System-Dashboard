@@ -5,7 +5,7 @@ const socket = io("http://localhost:3000");
 export default {
   namespaced: true,
   state: () => ({
-    hosts: {},
+    hosts: [],
     metrics: {
       cpu: '42%',
       memory: '65%',
@@ -13,25 +13,31 @@ export default {
     }
   }),
   mutations: {
-    updateHostData(state, data) {
-      state.hosts = { ...state.hosts, ...data };
-      console.log(state.hosts); // Overwrite hosts with the incoming data
-    },
+    updateHostData(state, newHostData) {
+      const index = state.hosts.findIndex(
+        host => host.host === newHostData.host && host.instance === newHostData.instance
+      );
+
+      if (index !== -1) {
+        // Update existing host
+        state.hosts.splice(index, 1, {
+          ...state.hosts[index],
+          ...newHostData
+        });
+      } else {
+        // Add new host
+        state.hosts.push(newHostData);
+      }
+
+      console.log("Updated Hosts:", state.hosts);
+    }
   },
   actions: {
-      initSocket({ commit, state }) {
-      socket.on("cpu_data", (cpuData) => {
-        commit("updateHostData", { ...state.hosts, cpu: cpuData });
+    initSocket({ commit }) {
+      socket.on("system_metrics", (data) => {
+        commit("updateHostData", data);
       });
-
-      socket.on("disk_data", (diskData) => {
-        commit("updateHostData", { ...state.hosts, disk: diskData });
-      });
-
-      socket.on("mem_data", (memData) => {
-        commit("updateHostData", { ...state.hosts, memory: memData });
-      });
-    },
+    }
   },
   getters: {}
 };
