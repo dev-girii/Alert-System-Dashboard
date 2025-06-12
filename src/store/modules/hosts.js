@@ -15,7 +15,8 @@ export default {
   mutations: {
     updateHostData(state, newHostData) {
       const index = state.hosts.findIndex(
-        host => host.host === newHostData.host && host.instance === newHostData.instance
+        host => host.host === newHostData.host && host.instance === newHostData.instance &&
+        host.role === newHostData.role
       );
 
       if (index !== -1) {
@@ -29,7 +30,7 @@ export default {
         state.hosts.push(newHostData);
       }
 
-      console.log("Updated Hosts:", state.hosts);
+      // console.log("Updated Hosts:", state.hosts);
     }
   },
   actions: {

@@ -74,7 +74,8 @@ export default {
   transition: border-color 0.3s ease;
   border-top: 6px solid;
   position: relative;
-  min-width: 30rem;
+  min-width: 0;
+  max-width: 100%;
 }
 /* Criticality borders */
 .critical {

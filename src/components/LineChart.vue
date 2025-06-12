@@ -1,32 +1,61 @@
 <template>
-  <canvas ref="canvas"></canvas>
+  <Line :data="chartData" :options="chartOptions" />
 </template>
 
 <script>
-import { Chart, registerables } from 'chart.js';
-Chart.register(...registerables);
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement
+} from 'chart.js';
+
+import { Line } from 'vue-chartjs';
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement
+);
 
 export default {
-  props: ['labels', 'data', 'label', 'color'],
-  mounted() {
-    new Chart(this.$refs.canvas, {
-      type: 'line',
-      data: {
-        labels: this.labels,
-        datasets: [{
-          label: this.label,
-          data: this.data,
-          fill: true,
-          backgroundColor: this.color,
-          borderColor: this.color.replace('0.5', '1'),
-          tension: 0.4
-        }]
-      },
-      options: {
+  name: 'LineChart',
+  components: { Line },
+  props: {
+    chartData: Object,
+    chartLabel: String,
+    color: {
+      type: String,
+      default: '#2196F3'
+    }
+  },
+  computed: {
+    chartOptions() {
+      return {
         responsive: true,
-        plugins: { legend: { display: true } }
-      }
-    });
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: this.chartLabel
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      };
+    }
   }
-}
+};
 </script>
