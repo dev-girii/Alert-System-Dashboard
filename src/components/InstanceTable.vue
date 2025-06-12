@@ -26,17 +26,35 @@
 </template>
 <script>
 export default{
-    props: ['tender'],
-    computed: {
-  tenderHosts() {
-    return this.$store.state.hosts.hosts.filter(h => h.instance === this.tender);
+  props: {
+    tender: {
+      type: String,
+      default: null
+    },
+    data: {
+      type: Array,
+      default: () => []
   }
-},
-mounted() {
-  console.log('All hosts:', this.$store.state.hosts.hosts);
-  console.log('Tender name:', this.tender);
-  console.log('Filtered hosts for tender:', this.tenderHosts);
-}
+  },
+  computed: {
+    tenderHosts() {
+      if (this.data.length > 0) {
+        return this.data;
+      }
+
+      // Fallback: when no data prop is passed, filter from store
+      return this.$store.state.hosts.hosts.filter(
+        (h) =>
+          h.instance?.trim().toLowerCase() ===
+          this.tender?.trim().toLowerCase()
+      );
+    }
+  },
+    mounted() {
+    console.log('TENDER:', this.tender);
+    console.log('DATA (via prop):', this.data);
+    console.log('Tender Hosts (computed):', this.tenderHosts);
+  }
 }
 </script>
 <style scoped>

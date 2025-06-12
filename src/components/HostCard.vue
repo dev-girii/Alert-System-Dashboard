@@ -55,9 +55,6 @@
 <script>
 export default {
   props: ["host"],
-  mounted(){
-    console.log(this.host);
-  }
 };
 </script>
 
