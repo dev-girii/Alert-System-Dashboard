@@ -20,15 +20,15 @@
     </div>
     <div class="metrics">
       <div class="metric-box">
-        <span class="metric-label">CPU</span>
+        <span class="metric-label">CPU IDLE</span>
         <span class="metric-value status-green">
-          {{ parseFloat(host.cpu_idle).toFixed(1) }}
+          {{ parseFloat(host.cpu_idle).toFixed(1) }}%
         </span>
       </div>
       <div class="metric-box">
         <span class="metric-label">Memory</span>
         <span class="metric-value status-green">
-          {{ parseFloat(host.mem_used_percent).toFixed(1) }}
+          {{ parseFloat(host.mem_used_percent).toFixed(1) }}%
         </span>
       </div>
       <div class="metric-box">
@@ -39,7 +39,7 @@
         <span class="metric-label">Disk</span>
         <span class="disk_path">{{ host.disk_path }}: 
           <span class="metric-value status-green">
-          {{ parseFloat(host.disk_used_percent).toFixed(1) }}
+          {{ parseFloat(host.disk_used_percent).toFixed(1) }}%
           </span>
         </span>
       </div>
@@ -231,8 +231,20 @@ export default {
     min-width: 60px;
     font-size: 0.8em;
   }
+  .host-card{
+    max-width: 100%;
+  }
 }
-
+/* @media (min-width:481px) and (max-width: 680px) {
+  .host-card{
+    max-width: 100%;
+  }
+}
+@media (min-width: 680px) and (max-width:880px){
+  .host-card{
+    max-width: 50%;
+  }
+} */
 /* .status-label {
   font-size: 0.85em;
   font-weight: 600;

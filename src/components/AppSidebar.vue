@@ -1,26 +1,31 @@
 <template>
   <!-- <aside class="sidebar"> -->
   <nav class="sidebar" aria-label="Primary navigation">
-    <a href="#" data-tooltip="Linux" aria-label="Linux" style="margin-bottom: 16px;">
+    <a href="#" title="Linux" aria-label="Linux" style="margin-bottom: 16px;">
   <i class="fab fa-linux"></i>
 </a>
 <RouterLink to="/">
-  <a href="#" data-tooltip="Dashboard" aria-label="Dashboard" class="active">
+  <a href="#" title="Dashboard" aria-label="Dashboard" class="active">
     <i class="fas fa-tachometer-alt"></i>
   </a>
 </RouterLink>
 <RouterLink to="/statistics">
-  <a href="#" data-tooltip="Explore" aria-label="Explore">
+  <a href="#" title="Explore" aria-label="Explore">
     <i class="fas fa-chart-bar"></i>
   </a>
 </RouterLink>
+<RouterLink to='/inventory-details'>
+  <a href="#" title="Inventory Details" aria-label="Inventory Details">
+    <i class="fas fa-boxes"></i>
+  </a>
+</RouterLink>
 <RouterLink to='/notifications'>
-  <a href="#" data-tooltip="Alerts" aria-label="Alerts">
+  <a href="#" title="Alerts" aria-label="Alerts">
     <i class="fas fa-bell"></i>
   </a>
 </RouterLink>
 
-<a href="#" data-tooltip="Settings" aria-label="Settings" style="margin-top: auto;">
+<a href="#" title="Settings" aria-label="Settings" style="margin-top: auto;">
   <i class="fas fa-cog"></i>
 </a>
 

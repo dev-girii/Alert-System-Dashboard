@@ -16,6 +16,7 @@ export default {
   padding: 1rem;
   background: #ecf0f1;
   border-radius: 8px;
+  justify-content: center;
   margin: 0.5rem;
 }
 </style>

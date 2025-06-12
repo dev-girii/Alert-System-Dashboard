@@ -6,6 +6,7 @@ import datetime
 import threading
 from decimal import Decimal
 from flask_cors import CORS
+import pytz 
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")  # Allow WebSocket
@@ -46,31 +47,38 @@ def get_instance_history(instance):
         for role in roles:
             # Fetch CPU data
             cursor.execute("""
-                SELECT time, usage_idle FROM public.cpu
-                WHERE instance = %s AND role = %s AND cpu = 'cpu-total'
-                ORDER BY time ASC LIMIT 50
+                           SELECT * FROM (
+    SELECT time, usage_idle
+    FROM public.cpu
+    WHERE instance = %s AND role = %s AND cpu = 'cpu-total'
+    ORDER BY time DESC
+    LIMIT 5
+) AS sub
+ORDER BY time ASC;
             """, (instance, role))
             cpu_rows = cursor.fetchall()
 
             # Fetch MEM data
             cursor.execute("""
+                           SELECT * FROM (
                 SELECT time, used_percent FROM public.mem
                 WHERE instance = %s AND role = %s
-                ORDER BY time ASC LIMIT 50
+                ORDER BY time DESC LIMIT 5
+) AS sub
+ORDER BY time ASC;
             """, (instance, role))
             mem_rows = cursor.fetchall()
-
             # Prepare structured output
             result[role] = {
                 "cpu": [
                     {
-                        "time": row[0].isoformat(),
+                        "time": pytz.utc.localize(row[0]).astimezone(pytz.timezone('Asia/Kolkata')).isoformat(),
                         "cpu_idle": float(row[1])
                     } for row in cpu_rows
                 ],
                 "mem": [
                     {
-                        "time": row[0].isoformat(),
+                        "time": pytz.utc.localize(row[0]).astimezone(pytz.timezone('Asia/Kolkata')).isoformat(),
                         "mem_used_percent": float(row[1])
                     } for row in mem_rows
                 ]
@@ -139,8 +147,14 @@ def fetch_and_emit_data():
 
                     if isinstance(raw_time, str):
                         raw_time = datetime.datetime.fromisoformat(raw_time)
+                    # Convert to IST using pytz
+                    if raw_time.tzinfo is None:
+                        raw_time = pytz.utc.localize(raw_time)
+                    ist = pytz.timezone('Asia/Kolkata')
+                    raw_time = raw_time.astimezone(ist)
 
                     formatted_time = raw_time.strftime("%d/%m/%y - %H:%M:%S") if raw_time else None
+                    # formatted_time = raw_time.strftime("%d/%m/%y - %H:%M:%S") if raw_time else None
 
                     merged = {
                         'time': formatted_time,

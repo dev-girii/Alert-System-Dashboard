@@ -2,14 +2,16 @@
   <div class="instance-graph-container">
     <div v-for="(data, role) in historyData" :key="role" class="role-section">
       <h3>{{ role }}</h3>
-<LineChart
-  :chart-data="prepareChart(data.cpu, 'cpu_idle', 'CPU Usage', 'rgba(75, 192, 192, 1)')"
-  chart-label="CPU Usage"
-/>
-<LineChart
-  :chart-data="prepareChart(data.mem, 'mem_used_percent', 'Memory Usage', 'rgba(255, 99, 132, 1)')"
-  chart-label="Memory Usage"
-/>
+      <div class="chartCollection">
+        <LineChart
+          :chart-data="prepareChart(data.cpu, 'cpu_idle', 'CPU Usage', 'rgba(75, 192, 192, 1)')"
+          chart-label="CPU Usage"
+        />
+        <LineChart
+          :chart-data="prepareChart(data.mem, 'mem_used_percent', 'Memory Usage', 'rgba(255, 99, 132, 1)')"
+          chart-label="Memory Usage"
+        />
+      </div>
 
     </div>
   </div>
@@ -29,11 +31,17 @@ export default {
   },
   mounted() {
     this.fetchHistory();
+    this.interval = setInterval(() => {
+      this.fetchHistory();
+    }, 10000);
+  },
+  beforeUnmount() {
+    clearInterval(this.interval);
   },
   methods: {
     async fetchHistory() {
       try {
-        const response = await axios.get(`http://192.168.1.5:3000/api/history/${this.tender}`);
+        const response = await axios.get(`http://localhost:3000/api/history/${this.tender}`);
         console.log(response.data);
         this.historyData = response.data;
         console.log("Loaded history data:", this.historyData);
@@ -66,7 +74,6 @@ prepareChart(dataArray, fieldKey, label, color = '#2196F3') {
 }
 
 /* Charts Section */
-
 .chart-card {
   background: #fff;
   padding: 1.2rem;

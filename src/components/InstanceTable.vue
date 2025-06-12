@@ -7,17 +7,17 @@
         <thead>
           <tr>
             <th>Role</th>
-            <th>CPU (%)</th>
-            <th>Mem(GB)</th>
-            <th>Disk (GB)</th>
+            <th>CPU</th>
+            <th>Mem</th>
+            <th>Disk</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="host in tenderHosts" :key="host.role">
             <td>{{ host.role }}</td>
-            <td>{{ host.cpu_idle }}</td>
-            <td>{{ host.mem_used_percent }}</td>
-            <td>{{ host.disk_used_percent }}</td>
+            <td>{{ parseFloat(host.cpu_idle).toFixed(1) }}%</td>
+            <td>{{ parseFloat(host.mem_used_percent).toFixed(1) }}%</td>
+            <td>{{ parseFloat(host.disk_used_percent).toFixed(1) }}%</td>
           </tr>
         </tbody>
       </table>
