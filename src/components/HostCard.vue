@@ -32,17 +32,53 @@
         </span>
       </div>
       <div class="metric-box">
-        <span class="metric-label">Network RX/TX</span>
-        <span class="metric-value">30 / 25 MB/s</span>
-      </div>
-      <div class="metric-box">
+        <span class="metric-label">Network S/R</span>
+        <span class="metric-value">
+          <template v-if="host.net_bytes_recv != null && host.net_bytes_sent != null">
+            {{ (host.net_bytes_recv / (1024 * 1024 * 1024)).toFixed(2) }} / 
+            {{ (host.net_bytes_sent / (1024 * 1024 * 1024)).toFixed(2) }} GB
+          </template>
+          <template v-else>
+            N/A
+          </template>
+        </span>
+</div>
+      <!-- <div class="metric-box">
         <span class="metric-label">Disk</span>
-        <span class="disk_path">{{ host.disk_path }}: 
+        <span class="disk_path">{{ host.disks[0].path }}: 
           <span class="metric-value status-green">
-          {{ parseFloat(host.disk_used_percent).toFixed(1) }}%
+          {{ parseFloat(host.disks[0].used_percent).toFixed(1) }}%
           </span>
         </span>
-      </div>
+      </div> -->
+<!-- Loop through all disks if available -->
+<div class="metric-box" v-if="host && host.disks && host.disks.length">
+  <span class="metric-label">Disk</span>
+  <div class="disk_path">
+    {{
+      highestDisk.path || highestDisk.device
+    }}:
+    <span class="metric-value status-green">
+      {{
+        highestDisk.used_percent != null
+          ? parseFloat(highestDisk.used_percent).toFixed(1)
+          : 'N/A'
+      }}%
+    </span>
+  </div>
+</div>
+
+
+
+<!-- Fallback if no disk data is present -->
+<div v-else>
+  <div class="metric-box">
+    <span class="metric-label">Disk</span>
+    <span class="disk_path">N/A</span>
+  </div>
+</div>
+
+
     </div>
     <div class="details-link">
       <Router-link :to="`/view-details-${host.instance}`">
@@ -53,8 +89,24 @@
 </template>
 
 <script>
+// export default {
+//   props: ["host"],
+// };
 export default {
-  props: ["host"],
+  props: {
+    host: {
+      type: Object,
+      required: true
+    }
+  },
+    computed: {
+    highestDisk() {
+      if (!this.host?.disks?.length) return {};
+      return this.host.disks.reduce((max, current) =>
+        current.used_percent > (max.used_percent ?? 0) ? current : max
+      );
+    }
+  }
 };
 </script>
 
@@ -82,6 +134,9 @@ export default {
   border-color: #f39c12; /* orange */
 }
 
+.safe{
+  border-color: #2ecc71;
+}
 /* Host top row: IP, hostname, uptime */
 .host-top {
   display: flex;
@@ -269,13 +324,18 @@ export default {
     margin-bottom: 15px;
 }
 .host-card.critical .status-label::after {
-  content: "ALERT";
+  content: "CRITICAL";
   color: #e74c3c;
 }
 
 .host-card.warning .status-label::after {
   content: "WARNING";
   color: #f39c12;
+}
+
+.host-card.safe .status-label::after {
+  content: "SAFE";
+  color: #2ecc71;
 }
 /* 
 .host-card {

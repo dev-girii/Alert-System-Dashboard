@@ -1,16 +1,22 @@
 <template>
+  <h2>Usage:</h2>
   <div class="instance-graph-container">
     <div v-for="(data, role) in historyData" :key="role" class="role-section">
-      <h3>{{ role }}</h3>
+      <h3 style="text-align: center;">{{ role }}</h3>
       <div class="chartCollection">
-        <LineChart
+        <!-- <LineChart
           :chart-data="prepareChart(data.cpu, 'cpu_idle', 'CPU Usage', 'rgba(75, 192, 192, 1)')"
           chart-label="CPU Usage"
         />
         <LineChart
           :chart-data="prepareChart(data.mem, 'mem_used_percent', 'Memory Usage', 'rgba(255, 99, 132, 1)')"
           chart-label="Memory Usage"
-        />
+        /> -->
+        <LineChart
+  :chart-data="prepareCombinedChart(data)"
+  chart-label="CPU & Memory Usage"
+/>
+
       </div>
 
     </div>
@@ -49,15 +55,25 @@ export default {
         console.error("Failed to fetch history:", error);
       }
     },
-prepareChart(dataArray, fieldKey, label, color = '#2196F3') {
+prepareCombinedChart(data) {
+  // Align labels based on CPU data timestamps
+  const labels = data.cpu.map(d => new Date(d.time).toLocaleTimeString());
+
   return {
-    labels: dataArray.map(d => new Date(d.time).toLocaleTimeString()),
+    labels,
     datasets: [
       {
-        label,
-        data: dataArray.map(d => d[fieldKey]),
+        label: 'CPU Idle (%)',
+        data: data.cpu.map(d => d.cpu_idle),
+        borderColor: 'rgba(75, 192, 192, 1)',
         fill: false,
-        borderColor: color,
+        tension: 0.2
+      },
+      {
+        label: 'Memory Used (%)',
+        data: data.mem.map(d => d.mem_used_percent),
+        borderColor: 'rgba(255, 99, 132, 1)',
+        fill: false,
         tension: 0.2
       }
     ]
@@ -74,6 +90,13 @@ prepareChart(dataArray, fieldKey, label, color = '#2196F3') {
 }
 
 /* Charts Section */
+.instance-graph-container{
+  padding-top: 0.6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.2rem;
+  width: 100%;
+}
 .chart-card {
   background: #fff;
   padding: 1.2rem;

@@ -18,7 +18,7 @@ conn = psycopg2.connect(
     user="postgres",
     password="dharan06#",
     port=5432
-)
+) 
 cursor = conn.cursor()
 def row_to_dict(cursor, row):
     result = {}
@@ -119,13 +119,13 @@ def fetch_and_emit_data():
 
                 # Disk data
                 cursor.execute("""
-                    SELECT * FROM public.disk
-                    WHERE device = 'efivarfs' AND instance = %s AND role = %s
-                    ORDER BY time DESC LIMIT 1
+                    SELECT DISTINCT ON (device) * 
+                    FROM public.disk
+                    WHERE instance = %s AND role = %s
+                    ORDER BY device, time DESC
                 """, (instance, role))
-                row = cursor.fetchone()
-                if row:
-                    disk_data = row_to_dict(cursor, row)
+                rows = cursor.fetchall()
+                disk_data = [row_to_dict(cursor, row) for row in rows]
 
                 # Mem data
                 cursor.execute("""
@@ -136,6 +136,24 @@ def fetch_and_emit_data():
                 row = cursor.fetchone()
                 if row:
                     mem_data = row_to_dict(cursor, row)
+                net_data = {}  # Add this line before executing the query
+
+                # NET data — adjust based on interface and null role handling
+                if role is None or role == '':
+                    cursor.execute("""
+                        SELECT * FROM public.net
+                        WHERE interface = 'WiFi' AND instance = %s AND role IS NULL
+                        ORDER BY time DESC LIMIT 1
+                    """, (instance,))
+                else:
+                    cursor.execute("""
+                        SELECT * FROM public.net
+                        WHERE interface = 'WiFi' AND instance = %s AND role = %s
+                        ORDER BY time DESC LIMIT 1
+                    """, (instance, role))
+
+                row = cursor.fetchone()
+                net_data = row_to_dict(cursor, row) if row else {}
 
                 # Merge and emit
                 if cpu_data or disk_data or mem_data:
@@ -163,8 +181,16 @@ def fetch_and_emit_data():
                         'role': role,
                         'cpu_idle': cpu_data.get('usage_idle'),
                         'mem_used_percent': mem_data.get('used_percent'),
-                        'disk_path': disk_data.get('path'),
-                        'disk_used_percent': disk_data.get('used_percent'),
+                        'disks': [
+                            {
+                                'device': d.get('device'),
+                                'path': d.get('path'),
+                                'used_percent': d.get('used_percent')
+                            } for d in disk_data
+                        ],
+                        'net_interface': net_data.get('interface'),
+                        'net_bytes_recv': net_data.get('bytes_recv'),
+                        'net_bytes_sent': net_data.get('bytes_sent'),
                     }
 
                     socketio.emit('system_metrics', merged)

@@ -1,6 +1,6 @@
 <template>
     <div class="instanceTable">
-        <h2>Hosts Table</h2>
+        <h2>Nodes: </h2>
             <!-- <h2 class="host-title">🖥️ Instance: {{ host.name }}</h2> -->
     <div class="resource-table">
       <table>
@@ -17,7 +17,25 @@
             <td>{{ host.role }}</td>
             <td>{{ parseFloat(host.cpu_idle).toFixed(1) }}%</td>
             <td>{{ parseFloat(host.mem_used_percent).toFixed(1) }}%</td>
-            <td>{{ parseFloat(host.disk_used_percent).toFixed(1) }}%</td>
+            <td v-if="host.disks && host.disks.length">
+               <span class="disk_path">
+    <span
+      v-for="(disk, index) in host.disks"
+      :key="index"
+      style="margin-right: 10px;"
+    >
+      {{ disk.path || disk.device }}
+      <span class="metric-value status-green">
+        {{
+          disk.used_percent != null
+            ? parseFloat(disk.used_percent).toFixed(1)
+            : 'N/A'
+        }}%
+      </span>
+      <br/>
+    </span>
+  </span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -50,11 +68,6 @@ export default{
       );
     }
   },
-    mounted() {
-    console.log('TENDER:', this.tender);
-    console.log('DATA (via prop):', this.data);
-    console.log('Tender Hosts (computed):', this.tenderHosts);
-  }
 }
 </script>
 <style scoped>
@@ -67,6 +80,9 @@ export default{
   user-select: none;
 }
 
+.resource-table{
+  padding-top: 0.6rem;
+}
 /* Table Styling */
 .resource-table table {
   width: 100%;

@@ -4,10 +4,10 @@
         <div class="headerTitle">
             <h1>Linux Hosts Dashboard</h1>
         </div>
-        <div class="lastUpdated">
+        <!-- <div class="lastUpdated">
             <i class="fas fa-clock"></i><span>&nbsp;</span>
             Last Updated: <span id="time">&nbsp;12:45 PM</span> 
-        </div>
+        </div> -->
     </div>
   </header>
 </template>

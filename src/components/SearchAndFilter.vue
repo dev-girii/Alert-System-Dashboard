@@ -36,8 +36,8 @@ export default {
           color: "color:crimson",
         },
         {
-          name: "moderate",
-          label: "Moderate",
+          name: "warning",
+          label: "Warning",
           class: "fas fa-exclamation-circle",
           color: "color:orange",
         },

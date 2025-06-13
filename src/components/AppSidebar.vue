@@ -10,7 +10,7 @@
   </a>
 </RouterLink>
 <RouterLink to="/statistics">
-  <a href="#" title="Explore" aria-label="Explore">
+  <a href="#" title="Statistics" aria-label="Explore">
     <i class="fas fa-chart-bar"></i>
   </a>
 </RouterLink>
