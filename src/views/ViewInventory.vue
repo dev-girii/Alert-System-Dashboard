@@ -1,6 +1,8 @@
 <template>
   <div class="inventory-container">
-    <h2>Inventory Overview</h2>
+    <div class="inventory-title">
+      <h2>Inventory Overview</h2>
+    </div>
 
 <div v-if="Object.keys(groupedInstances).length">
   <div
@@ -8,7 +10,7 @@
     :key="instance"
     class="instance-section"
   >
-    <h3>{{ instance }}</h3>
+    <h3 style="text-align: center;">{{ instance }}</h3>
     <InstanceTable :tender="instance" :data="roles"/>
   </div>
 </div>
@@ -44,14 +46,15 @@ export default {
 </script>
 
 <style scoped>
-.inventory-container {
-  padding: 2rem;
+.inventory-title{
+  padding: 1.2rem;
+  text-align: center;
+  color: #2c3e50;
+  border-bottom: 1px solid;
 }
-
 .instance-section {
-  margin-bottom: 3rem;
   background: #f9f9f9;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 0 1.5rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }

@@ -1,20 +1,22 @@
 <template>
     <div class="instanceTable">
-        <h2>Nodes: </h2>
+        <!-- <h2>Nodes: </h2> -->
             <!-- <h2 class="host-title">🖥️ Instance: {{ host.name }}</h2> -->
     <div class="resource-table">
       <table>
         <thead>
           <tr>
-            <th>Role</th>
+            <th>ROLE</th>
+            <th>IP</th>
             <th>CPU</th>
-            <th>Mem</th>
-            <th>Disk</th>
+            <th>MEM</th>
+            <th>DISK</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="host in tenderHosts" :key="host.role">
-            <td>{{ host.role }}</td>
+            <td>{{ host.role }} </td>
+            <td>{{ host.ip }}</td>
             <td>{{ parseFloat(host.cpu_idle).toFixed(1) }}%</td>
             <td>{{ parseFloat(host.mem_used_percent).toFixed(1) }}%</td>
             <td v-if="host.disks && host.disks.length">
@@ -86,18 +88,19 @@ export default{
 /* Table Styling */
 .resource-table table {
   width: 100%;
-  border-collapse: separate;
+  border-collapse: collapse;
   border-spacing: 0;
   margin-bottom: 2rem;
   background: #fff;
-  border-radius: 12px;
+  border: 1px solid;
+  /* border-radius: 12px; */
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); */
   font-variant-numeric: tabular-nums;
 }
 
 .resource-table thead tr {
-  background: linear-gradient(90deg, #e0f2ff, #bbdefb);
+  background: #f0f2fa;
   color: #0d3b66;
 }
 
@@ -106,17 +109,14 @@ export default{
   padding: 1rem 1.5rem;
   text-align: center;
   font-size: 1rem;
-  border-bottom: 2px solid #90caf9;
+  border: 1px solid;
+  /* border-bottom: 2px solid #90caf9; */
   user-select: none;
 }
 
 .resource-table tbody tr {
   transition: background-color 0.25s ease;
   cursor: default;
-}
-
-.resource-table tbody tr:nth-child(odd) {
-  background-color: rgba(187, 222, 251, 0.15);
 }
 
 .resource-table tbody tr:hover {
@@ -129,7 +129,7 @@ export default{
   font-weight: 500;
   font-size: 0.95rem;
   color: #34495e;
-  border-bottom: 1px solid #e3f2fd;
+  border: 1px solid;
   user-select: text;
 }
 

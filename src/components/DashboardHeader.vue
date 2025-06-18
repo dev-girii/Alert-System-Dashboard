@@ -14,13 +14,13 @@
 
 <style scoped>
 .dashboard-header {
-  color: #1e202a;
+  color: #2c3e50;
   padding: 1.3rem 1rem 1rem 1rem;
   border-bottom: 1px solid;
 }
 .dashboard-header div{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 .headerTitle{

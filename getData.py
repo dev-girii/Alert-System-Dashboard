@@ -177,6 +177,7 @@ def fetch_and_emit_data():
                     merged = {
                         'time': formatted_time,
                         'host': cpu_data.get('host') or mem_data.get('host') or disk_data.get('host'),
+                        'ip': cpu_data.get('ip'),
                         'instance': instance,
                         'role': role,
                         'cpu_idle': cpu_data.get('usage_idle'),

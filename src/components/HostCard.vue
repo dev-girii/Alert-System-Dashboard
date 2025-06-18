@@ -1,12 +1,12 @@
 <template>
   <div class="host-card critical">
     <span class="status-label"></span>
-    <!-- <div class="instanceName">
-      TN Tenders
-    </div> -->
+    <div class="instanceName">
+      {{host.instance}}
+    </div>
     <div class="host-top">
       <div class="host-info">
-        <div class="host-ip" title="192.168.1.20"><span>Instance:</span> {{ host.instance }}</div>
+        <div class="host-ip" title="192.168.1.20"><span>IP:</span> {{ host.ip }}</div>
         <div class="host-name" title="app-server"><span>Host:</span> {{ host.host}}</div>
       </div>
       <div class="host-info">
